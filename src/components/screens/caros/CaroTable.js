@@ -109,6 +109,10 @@ const CaroTable = () => {
         // socketRef.current.emit('attack', data[userField].cell[data[userField].cell.length - 1])
         // socketRef.current.emit('attack', data.cellArr)
         socketRef.current.emit('attack', data.cellArr)
+        
+        return () => {
+            socketRef.current.disconnect();
+        };
     }, [data])
 
 
