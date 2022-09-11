@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, {memo} from 'react'
 
 const Table = ({ data, dataDispatch, me }) => {
-
     const attack = (item) => {
         const str = item[0] + '' + item[1] + '' + item[2] + '' + item[3]
 
@@ -64,7 +63,7 @@ const Table = ({ data, dataDispatch, me }) => {
     )
 }
 
-export default Table
+export default memo(Table)
 
 const styles = StyleSheet.create({
     tableContent: {

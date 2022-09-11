@@ -24,10 +24,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.phixuan.caro"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-facebook",
+        {
+          "userTrackingPermission": false
+        }
+      ]
+    ]
   }
 }

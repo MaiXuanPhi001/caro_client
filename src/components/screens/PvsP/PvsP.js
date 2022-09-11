@@ -2,10 +2,11 @@ import { Platform, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-n
 import React, { useContext, useEffect, useReducer, useRef, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 import { getById } from '../../Services/UserService'
-import UserInfomation from './UserInfomation'
+import Me from './Me'
 import Table from './Table'
 import socketIOClient from 'socket.io-client'
 import { contants } from '../../utils/Contants'
+import Competitor from './Competitor'
 
 const dataReducer = (state, action) => {
   switch (action.type) {
@@ -38,6 +39,8 @@ const PvsP = ({ route }) => {
   const { room, userInfo } = route.params
   const [competitor, setCompetitor] = useState({})
   const [me, setMe] = useState(userInfo)
+  const [secondMe, setSecondMe] = useState(20)
+  const [secondCompetitor, setSecondCompetitor] = useState(20)
   const socketRef = useRef()
 
   const [data, dataDispatch] = useReducer(dataReducer, initData)
@@ -57,12 +60,35 @@ const PvsP = ({ route }) => {
       getDataAttack(data)
     })
 
-    if (data.playerX.cell.length > 4 && !data.render) {
-      if (checkOne(data[me.player].column, data[me.player].row, 1, me.player)) return
-      if (checkOne(data[me.player].row, data[me.player].column, 1, me.player)) return
-      if (checkOne(data[me.player].lineOne, data[me.player].lineTwo, 2, me.player)) return
-      if (checkOne(data[me.player].lineTwo, data[me.player].lineOne, 2, me.player)) return
+    socketRef.current.on('server-draw', data => {
+      alert('Hòa')
+    })
+
+    
+
+    socketRef.current.on('server-time-out', data => {
+      if (data.room.join() === room.join()) {
+        if (data.playerLost === me._id) {
+          alert('you loss')
+        } else {
+          alert('you win')
+        }
+      }
+    })
+
+    setSecondMe(20)
+
+    if (data.playerO.cell.length < 50) {
+      if (data.playerX.cell.length > 4 && !data.render) {
+        if (checkOne(data[me.player].column, data[me.player].row, 1, me.player)) return
+        if (checkOne(data[me.player].row, data[me.player].column, 1, me.player)) return
+        if (checkOne(data[me.player].lineOne, data[me.player].lineTwo, 2, me.player)) return
+        if (checkOne(data[me.player].lineTwo, data[me.player].lineOne, 2, me.player)) return
+      }
+    } else {
+      socketRef.current.emit('client-draw', { ...data, room })
     }
+
     if (!data.render && data.playerX.cell.length > 0) socketRef.current.emit('client-attack', { ...data, room, id: me._id })
     return () => {
       socketRef.current.disconnect();
@@ -120,25 +146,38 @@ const PvsP = ({ route }) => {
   }
 
   const getDataAttack = (data) => {
+    setSecondCompetitor(20)
     if (data.room.join() === room.join() && data.id !== me._id) {
       dataDispatch({ type: 'GET_DATA_ATTACK', data })
     }
   }
 
+  const timeOut = (id) => {
+    socketRef.current.emit('client-time-out', { playerLost: id, room, id: me._id })
+  }
+
   return (
     <ScrollView style={styles.container}>
-      <UserInfomation
+      <Competitor
+        data={data}
         user={competitor}
+        second={secondCompetitor}
+        setSecond={setSecondCompetitor}
+        timeOut={timeOut}
       />
       <Table
         data={data}
         dataDispatch={dataDispatch}
         me={me}
       />
-      <UserInfomation
+      <Me
+        data={data}
         user={me}
+        second={secondMe}
+        setSecond={setSecondMe}
+        timeOut={timeOut}
       />
-      <Text>X</Text>
+      {/* <Text>X</Text>
       <Text>cell: {JSON.stringify(data.playerX.cell)}</Text>
       <Text>column: {JSON.stringify(data.playerX.column)}</Text>
       <Text>row: {JSON.stringify(data.playerX.row)}</Text>
@@ -149,7 +188,7 @@ const PvsP = ({ route }) => {
       <Text>column: {JSON.stringify(data.playerO.column)}</Text>
       <Text>row: {JSON.stringify(data.playerO.row)}</Text>
       <Text>lineOne: {JSON.stringify(data.playerO.lineOne)}</Text>
-      <Text>lineTwo: {JSON.stringify(data.playerO.lineTwo)}</Text>
+      <Text>lineTwo: {JSON.stringify(data.playerO.lineTwo)}</Text> */}
     </ScrollView>
   )
 }
