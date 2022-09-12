@@ -20,7 +20,6 @@ const ItemHistory = ({ item }) => {
                         style={{ color: item.win === '' ? 'green' : item.win === item.id_competitor._id ? 'red' : '#18A3F5' }}
                     >{item.win === '' ? 'Draw' : item.win === item.id_competitor._id ? 'Lose' : 'Win'}</Text>
                 </View>
-
             </View>
         </View>
     )

@@ -11,12 +11,14 @@ const LoginFacebook = () => {
             });
             const { type, token, expirationDate, permissions, declinedPermissions } =
                 await Facebook.logInWithReadPermissionsAsync({
-                    permissions: ['public_profile'],
+                    permissions: ['public_profile', 'email'],
                 });
             if (type === 'success') {
                 // Get the user's name using Facebook's Graph API
-                const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-                alert('Logged in!', `Hi ${(await response.json()).name}!`);
+                const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,about,picture`);
+                const info = await response.json()
+                console.log('info: ', info)
+                // alert('Logged in!', `Hi ${(await response.json()).name}!`);
             } else {
                 // type === 'cancel'
             }
@@ -27,7 +29,10 @@ const LoginFacebook = () => {
     }
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+                onPress={logInFacebook}
+                style={styles.button}
+            >
                 <Image
                     style={styles.icon}
                     resizeMode='contain'

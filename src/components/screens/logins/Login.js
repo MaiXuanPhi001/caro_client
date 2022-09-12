@@ -1,5 +1,5 @@
-import { Button, Image, ScrollView, StyleSheet, Text, TextInput, ToastAndroid, View } from 'react-native'
-import React, { useContext, useState } from 'react'
+import { Button, Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 import BannerUser from '../resuse/BannerUser'
 import MyInput from '../resuse/MyInput'
@@ -12,23 +12,30 @@ import Newbie from '../resuse/Newbie'
 // https://dribbble.com/shots/16316303-Login-and-Sign-up-Screens/attachments/8205759?mode=media
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('pxuan932@gmail.com')
+  const [password, setPassword] = useState('123456')
   const { onLogin, setIsLoggedIn } = useContext(UserContext)
   const [loading, setLoading] = useState(false)
 
   const login = async () => {
     try {
+      if (email.trim() === '' || password === '') {
+        alert('Email or password is empty')
+        return
+      }
       setLoading(true)
       const res = await onLogin(email, password)
       res === 1 && setIsLoggedIn(true)
-      res === 2 && alert('Mat khau sai')
+      res === 0 && alert('Mat khau sai')
       res === -1 && alert('Loi mang')
-      setLoading(false)
     } catch (error) {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    return () => setLoading(false)
+  }, [])
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

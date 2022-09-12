@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, {useEffect} from 'react'
+import { Image, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect } from 'react'
 
-const Hello = ({navigation}) => {
+const Hello = ({ navigation }) => {
 
   useEffect(() => {
     const timer = setTimeout(() => navigation.replace('MainNavigation'), 2000);
@@ -12,7 +12,11 @@ const Hello = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Hello</Text>
+      <Image
+        style={styles.img}
+        resizeMode='contain'
+        source={require('../../../assets/images/carohello.png')}
+      />
     </View>
   )
 }
@@ -20,6 +24,9 @@ const Hello = ({navigation}) => {
 export default Hello
 
 const styles = StyleSheet.create({
+  img: {
+    width: '80%'
+  },
   container: {
     flex: 1,
     alignItems: 'center',
