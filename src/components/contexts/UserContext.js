@@ -8,7 +8,7 @@ export const UserContext = createContext()
 
 export const UserContextProvider = props => {
     const { children } = props
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
     const [userInfo, setUserInfo] = useState({});
 
     const onLogin = async (email, password) => {
@@ -30,6 +30,7 @@ export const UserContextProvider = props => {
                 isLoggedIn,
                 setIsLoggedIn,
                 userInfo,
+                setUserInfo,
                 onLogin
             }}
         >
