@@ -1,11 +1,17 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import * as Facebook from 'expo-facebook'
+import { UserContext } from '../../contexts/UserContext'
+import LottieView from 'lottie-react-native';
+import loadingLotite from '../../../assets/lotties/loading.json'
 
 const LoginFacebook = () => {
+    const { onLoginFacebook } = useContext(UserContext)
+    const [loading, setLoading] = useState(false)
 
     const logInFacebook = async () => {
         try {
+            setLoading(true)
             await Facebook.initializeAsync({
                 appId: '401215678787048',
             });
@@ -17,27 +23,46 @@ const LoginFacebook = () => {
                 // Get the user's name using Facebook's Graph API
                 const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,about,picture`);
                 const info = await response.json()
-                console.log('info: ', info)
-                // alert('Logged in!', `Hi ${(await response.json()).name}!`);
+                const res = await onLoginFacebook({ uid: info.id, username: info.name, email: info.email, img: info.picture.data.url })
+                if (!res) {
+                    alert('Has an error, please try again!')
+                }
             } else {
                 // type === 'cancel'
             }
+            setLoading(false)
         } catch ({ message }) {
-            console.log(`Facebook Login Error: ${message}`)
-            alert(`Facebook Login Error: ${message}`);
+            setLoading(false)
+            alert(`Has an error, please try again`);
         }
     }
+
+    useEffect(() => {
+        return () => setLoading(false)
+    }, [])
+
     return (
         <View style={styles.container}>
             <TouchableOpacity
                 onPress={logInFacebook}
+                disabled={loading}
                 style={styles.button}
             >
-                <Image
-                    style={styles.icon}
-                    resizeMode='contain'
-                    source={require('../../../assets/images/facebook.png')}
-                />
+                {loading ?
+                    <LottieView
+                        style={styles.lottieView}
+                        resizeMode="contain"
+                        autoSize
+                        source={loadingLotite}
+                        autoPlay
+                        loop
+                    /> :
+                    <Image
+                        style={styles.icon}
+                        resizeMode='contain'
+                        source={require('../../../assets/images/facebook.png')}
+                    />
+                }
                 <Text style={styles.text}>Login with Facebook</Text>
             </TouchableOpacity>
         </View>
@@ -47,6 +72,9 @@ const LoginFacebook = () => {
 export default LoginFacebook
 
 const styles = StyleSheet.create({
+    lottieView: {
+        width: 80,
+    },
     text: {
         color: '#091E42',
         fontWeight: 'bold',

@@ -14,3 +14,8 @@ export const register = async (data) => {
     const res = await axiosInstance.post('api/user/register', data)
     return res
 }
+
+export const loginFacebook = async (data) => {
+    const res = await axiosInstance.post('api/user/loginFacebook', data)
+    return res
+}
