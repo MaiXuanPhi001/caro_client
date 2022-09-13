@@ -19,3 +19,8 @@ export const loginFacebook = async (data) => {
     const res = await axiosInstance.post('api/user/loginFacebook', data)
     return res
 }
+
+export const getAll = async () => {
+    const res = await axiosInstance.get('api/user/getAll')
+    return res
+}
