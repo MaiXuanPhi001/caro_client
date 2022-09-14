@@ -1,9 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
-const Competitor = ({ data, user, second, setSecond, timeOut }) => {
-    const [time, setTime] = useState(false)
-
+const Competitor = ({ data, user, second, setSecond, timeOut, runTime }) => {
     useEffect(() => {
         let timer = setInterval(() => {
             if (second > -15) {
@@ -17,9 +15,8 @@ const Competitor = ({ data, user, second, setSecond, timeOut }) => {
                     }
                 }
             } else {
-                if (!time) {
-                    setTime(true)
-                    timeOut(user._id)
+                if (!runTime) {
+                    timeOut(user)
                 }
             }
 
@@ -34,12 +31,12 @@ const Competitor = ({ data, user, second, setSecond, timeOut }) => {
         <View style={styles.container}>
             <Image
                 style={styles.avatar}
-                source={require('../../../assets/images/profile.png')}
+                source={{ uri: user.img }}
                 resizeMode='contain'
             />
             <View>
                 <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.username}>{user.username}phixuan</Text>
+                    <Text style={styles.username}>{user.username}</Text>
                     <Text
                         style={[
                             styles.player,
@@ -50,17 +47,17 @@ const Competitor = ({ data, user, second, setSecond, timeOut }) => {
                     </Text>
                 </View>
                 <View>
-                    <Text style={styles.elo}>Elo: {user.elo}1220</Text>
+                    <Text style={styles.elo}>Elo: {user.elo}</Text>
                     <Text
                         style={[
                             styles.second,
                             {
-                                backgroundColor: (user.player === 'playerX' && data.turn === 1) ? 'yellow' :
-                                    (user.player === 'playerO' && data.turn === 2) ? 'yellow' : '#20FF20'
+                                backgroundColor: (user.player === 'playerX' && data.turn === 1) ? 'red' :
+                                    (user.player === 'playerO' && data.turn === 2) ? 'red' : '#20FF20'
                             }
                         ]}
                     >
-                        00:{second}
+                        00:{second > -1 ? second : '00'}
                     </Text>
                 </View>
             </View>
@@ -72,6 +69,7 @@ export default Competitor
 
 const styles = StyleSheet.create({
     second: {
+        width: 70,
         fontWeight: 'bold',
         borderRadius: 5,
         color: 'white',

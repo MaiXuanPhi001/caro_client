@@ -12,8 +12,8 @@ import Newbie from '../resuse/Newbie'
 // https://dribbble.com/shots/16316303-Login-and-Sign-up-Screens/attachments/8205759?mode=media
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState('pxuan932@gmail.com')
-  const [password, setPassword] = useState('123456')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const { onLogin, setIsLoggedIn } = useContext(UserContext)
   const [loading, setLoading] = useState(false)
 
@@ -28,6 +28,7 @@ const Login = ({ navigation }) => {
       res === 1 && setIsLoggedIn(true)
       res === 0 && alert('Mat khau sai')
       res === -1 && alert('Loi mang')
+      setLoading(false)
     } catch (error) {
       setLoading(false)
     }

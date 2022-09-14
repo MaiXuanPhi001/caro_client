@@ -12,7 +12,6 @@ const History = ({ userInfo }) => {
 
     const getMatchAPI = async () => {
         const res = await getById(userInfo._id)
-        console.log('data: ', res.data)
         !res.error && setData(res.data)
     }
 
@@ -35,6 +34,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         marginTop: 80,
-        paddingHorizontal: 15
+        paddingHorizontal: 15,
+        marginBottom: 50,
     }
 })

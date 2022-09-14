@@ -77,7 +77,10 @@ const styles = StyleSheet.create({
         padding: 10,
         elevation: 6,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        shadowOffset: { width: 0, height: 0 },
+        shadowColor: 'black',
+        shadowOpacity: 0.5,
     },
     container: {
         width: '100%',

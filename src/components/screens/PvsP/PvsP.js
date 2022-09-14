@@ -8,6 +8,7 @@ import socketIOClient from 'socket.io-client'
 import { contants } from '../../utils/Contants'
 import Competitor from './Competitor'
 import ModalResult from './ModalResult'
+import { doneMatch } from '../../Services/MatchService'
 
 const dataReducer = (state, action) => {
   switch (action.type) {
@@ -44,6 +45,8 @@ const PvsP = ({ route, navigation }) => {
   const [secondCompetitor, setSecondCompetitor] = useState(20)
   const [showModal, setShowModal] = useState(false)
   const [result, setResult] = useState()
+  const [runTimeMe, setRunTimeMe] = useState(false)
+  const [runTimeCompetitor, setRunTimeCompetitor] = useState(false)
   const socketRef = useRef()
 
   const [data, dataDispatch] = useReducer(dataReducer, initData)
@@ -63,20 +66,8 @@ const PvsP = ({ route, navigation }) => {
       getDataAttack(data)
     })
 
-    socketRef.current.on('server-draw', data => {
-      alert('Hòa')
-    })
-
-
-
-    socketRef.current.on('server-time-out', data => {
-      if (data.room.join() === room.join()) {
-        if (data.playerLost === me._id) {
-          alert('you loss')
-        } else {
-          alert('you win')
-        }
-      }
+    socketRef.current.on('server-done-match', data => {
+      resultMatch(data)
     })
 
     setSecondMe(20)
@@ -89,7 +80,8 @@ const PvsP = ({ route, navigation }) => {
         if (checkOne(data[me.player].lineTwo, data[me.player].lineOne, 2, me.player)) return
       }
     } else {
-      socketRef.current.emit('client-draw', { ...data, room })
+      // draw match
+      socketRef.current.emit('client-done-match', { playerLost: competitor, room, win: false })
     }
 
     if (!data.render && data.playerX.cell.length > 0) socketRef.current.emit('client-attack', { ...data, room, id: me._id })
@@ -126,7 +118,7 @@ const PvsP = ({ route, navigation }) => {
           compareNumber += sub
           win++
           if (win > 3) {
-            console.log('win')
+            socketRef.current.emit('client-done-match', { playerLost: competitor, room, win: true })
             return true
           }
         }
@@ -155,8 +147,55 @@ const PvsP = ({ route, navigation }) => {
     }
   }
 
-  const timeOut = (id) => {
-    socketRef.current.emit('client-time-out', { playerLost: id, room, id: me._id })
+  const resultMatch = async (data) => {
+    if (data.room.join() === room.join()) {
+      setRunTimeMe(true)
+      setRunTimeCompetitor(true)
+      if (data.win) {
+        if (data.playerLost._id !== userInfo._id) {
+          const obj = {
+            user1: userInfo._id,
+            user2: data.playerLost._id,
+            win: userInfo._id,
+            eloUser1: userInfo.elo + 10,
+            winUser1: userInfo.win + 1,
+            drawUser1: userInfo.draw,
+            loseUser1: userInfo.lose,
+            eloUser2: data.playerLost.elo - 10,
+            winUser2: data.playerLost.win,
+            drawUser2: data.playerLost.draw,
+            loseUser2: data.playerLost.lose + 1
+          }
+          await doneMatch(obj)
+          setResult(0)
+        } else {
+          setResult(2)
+        }
+      } else {
+        if (data.playerLost._id !== userInfo._id) {
+          const obj = {
+            user1: userInfo._id,
+            user2: data.playerLost._id,
+            win: userInfo._id,
+            eloUser1: userInfo.elo,
+            winUser1: userInfo.win,
+            drawUser1: userInfo.draw + 1,
+            loseUser1: userInfo.lose,
+            eloUser2: data.playerLost.elo,
+            winUser2: data.playerLost.win,
+            drawUser2: data.playerLost.draw + 1,
+            loseUser2: data.playerLost.lose
+          }
+          await doneMatch(obj)
+        }
+        setResult(1)
+      }
+      setShowModal(true)
+    }
+  }
+
+  const timeOut = (playerLost) => {
+    socketRef.current.emit('client-done-match', { playerLost, room, win: true })
   }
 
   return (
@@ -166,7 +205,8 @@ const PvsP = ({ route, navigation }) => {
         user={competitor}
         second={secondCompetitor}
         setSecond={setSecondCompetitor}
-      // timeOut={timeOut}
+        timeOut={timeOut}
+        runTime={runTimeCompetitor}
       />
       <Table
         data={data}
@@ -179,6 +219,7 @@ const PvsP = ({ route, navigation }) => {
         second={secondMe}
         setSecond={setSecondMe}
         timeOut={timeOut}
+        runTime={runTimeMe}
       />
       <ModalResult
         isShow={showModal}
