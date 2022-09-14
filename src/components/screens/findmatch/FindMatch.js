@@ -46,12 +46,12 @@ const FindMatch = ({ navigation }) => {
                 autoPlay
                 loop
             />
-            <Text style={styles.text}>Đang tim trận...</Text>
+            <Text style={styles.text}>Looking for a match...</Text>
             <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 style={styles.button}
             >
-                <Text style={styles.textButton}>Hủy</Text>
+                <Text style={styles.textButton}>Cancel</Text>
             </TouchableOpacity>
         </ScrollView>
     )

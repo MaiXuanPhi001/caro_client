@@ -26,8 +26,8 @@ const Login = ({ navigation }) => {
       setLoading(true)
       const res = await onLogin(email, password)
       res === 1 && setIsLoggedIn(true)
-      res === 0 && alert('Mat khau sai')
-      res === -1 && alert('Loi mang')
+      res === 0 && alert('Password incorrect')
+      res === -1 && alert('Error network')
       setLoading(false)
     } catch (error) {
       setLoading(false)
