@@ -1,14 +1,18 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import Infomation from './Infomation'
 import History from './History'
 import Logout from './Logout'
+import { UserContext } from '../../contexts/UserContext'
+
 
 const Profile = () => {
+  const { userInfo } = useContext(UserContext)
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Infomation />
-      <History />
+      <Infomation userInfo={userInfo} />
+      <History userInfo={userInfo} />
       <Logout />
     </ScrollView>
   )

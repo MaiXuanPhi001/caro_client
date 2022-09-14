@@ -1,24 +1,25 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { useTheme } from '@react-navigation/native'
 
-const ItemHistory = ({ item }) => {
+const ItemHistory = ({ item, id_user }) => {
 
     return (
         <View style={styles.container}>
             <Image
                 style={styles.image}
-                source={require('../../../assets/images/profile.png')}
+                source={{ uri: item.user1._id === id_user ? item.user2.img : item.user1.img }}
             />
             <View style={styles.content}>
                 <View>
-                    <Text style={styles.username}>{item.id_competitor.username}</Text>
-                    <Text>{item.id_competitor.email}</Text>
+                    <Text style={styles.username}>{item.user1._id === id_user ? item.user2.username : item.user1.username}</Text>
+                    <Text>{item.user1._id === id_user ? item.user2.email : item.user1.email}</Text>
                 </View>
                 <View>
-                    <Text style={styles.elo}>elo: {item.id_competitor.elo}</Text>
+                    <Text style={styles.elo}>elo: {item.user1._id === id_user ? item.user2.elo : item.user1.elo}</Text>
                     <Text
-                        style={{ color: item.win === '' ? 'green' : item.win === item.id_competitor._id ? 'red' : '#18A3F5' }}
-                    >{item.win === '' ? 'Draw' : item.win === item.id_competitor._id ? 'Lose' : 'Win'}</Text>
+                        style={{ color: item.win === null ? 'green' : item.win === id_user ? '#18A3F5' : 'red' }}
+                    >{item.win === null ? 'Draw' : item.win === id_user ? 'Win' : 'Lose'}</Text>
                 </View>
             </View>
         </View>

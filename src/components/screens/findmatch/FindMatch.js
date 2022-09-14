@@ -1,8 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useRef } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 import socketIOClient from 'socket.io-client'
 import { contants } from '../../utils/Contants'
+import LottieView from 'lottie-react-native';
+import tictac from '../../../assets/lotties/tictactioe.json'
 
 const FindMatch = ({ navigation }) => {
     const { userInfo } = useContext(UserContext)
@@ -35,18 +37,56 @@ const FindMatch = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <Text>Đang tìm trận</Text>
-        </View>
+        <ScrollView contentContainerStyle={styles.container}>
+            <LottieView
+                style={styles.lottieView}
+                resizeMode="contain"
+                autoSize
+                source={tictac}
+                autoPlay
+                loop
+            />
+            <Text style={styles.text}>Đang tim trận...</Text>
+            <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={styles.button}
+            >
+                <Text style={styles.textButton}>Hủy</Text>
+            </TouchableOpacity>
+        </ScrollView>
     )
 }
 
 export default FindMatch
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+    textButton: {
+        color: 'white',
+        fontWeight: 'bold'
+    },
+    button: {
+        width: '50%',
+        height: 40,
+        borderRadius: 10,
+        backgroundColor: '#50C2C9',
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    text: {
+        color: '#091E42',
+        fontWeight: 'bold',
+        marginVertical: 10,
+        marginHorizontal: 20,
+        fontSize: 20,
+    },
+    lottieView: {
+        width: 200
+    },
+    container: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white'
     }
 })

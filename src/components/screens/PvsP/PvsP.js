@@ -1,4 +1,4 @@
-import { Platform, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Platform, ScrollView, StatusBar, StyleSheet, Text, View, Button } from 'react-native'
 import React, { useContext, useEffect, useReducer, useRef, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 import { getById } from '../../Services/UserService'
@@ -7,6 +7,7 @@ import Table from './Table'
 import socketIOClient from 'socket.io-client'
 import { contants } from '../../utils/Contants'
 import Competitor from './Competitor'
+import ModalResult from './ModalResult'
 
 const dataReducer = (state, action) => {
   switch (action.type) {
@@ -35,12 +36,14 @@ const dataReducer = (state, action) => {
   }
 }
 
-const PvsP = ({ route }) => {
+const PvsP = ({ route, navigation }) => {
   const { room, userInfo } = route.params
   const [competitor, setCompetitor] = useState({})
   const [me, setMe] = useState(userInfo)
   const [secondMe, setSecondMe] = useState(20)
   const [secondCompetitor, setSecondCompetitor] = useState(20)
+  const [showModal, setShowModal] = useState(false)
+  const [result, setResult] = useState()
   const socketRef = useRef()
 
   const [data, dataDispatch] = useReducer(dataReducer, initData)
@@ -64,7 +67,7 @@ const PvsP = ({ route }) => {
       alert('Hòa')
     })
 
-    
+
 
     socketRef.current.on('server-time-out', data => {
       if (data.room.join() === room.join()) {
@@ -157,13 +160,13 @@ const PvsP = ({ route }) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Competitor
         data={data}
         user={competitor}
         second={secondCompetitor}
         setSecond={setSecondCompetitor}
-        timeOut={timeOut}
+      // timeOut={timeOut}
       />
       <Table
         data={data}
@@ -177,18 +180,12 @@ const PvsP = ({ route }) => {
         setSecond={setSecondMe}
         timeOut={timeOut}
       />
-      {/* <Text>X</Text>
-      <Text>cell: {JSON.stringify(data.playerX.cell)}</Text>
-      <Text>column: {JSON.stringify(data.playerX.column)}</Text>
-      <Text>row: {JSON.stringify(data.playerX.row)}</Text>
-      <Text>lineOne: {JSON.stringify(data.playerX.lineOne)}</Text>
-      <Text>lineTwo: {JSON.stringify(data.playerX.lineTwo)}</Text>
-      <Text>O</Text>
-      <Text>cell: {JSON.stringify(data.playerO.cell)}</Text>
-      <Text>column: {JSON.stringify(data.playerO.column)}</Text>
-      <Text>row: {JSON.stringify(data.playerO.row)}</Text>
-      <Text>lineOne: {JSON.stringify(data.playerO.lineOne)}</Text>
-      <Text>lineTwo: {JSON.stringify(data.playerO.lineTwo)}</Text> */}
+      <ModalResult
+        isShow={showModal}
+        setShow={setShowModal}
+        navigation={navigation}
+        result={result}
+      />
     </ScrollView>
   )
 }
@@ -197,7 +194,7 @@ export default PvsP
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 20
   }
 })

@@ -82,5 +82,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container: {
+        height: '70%',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

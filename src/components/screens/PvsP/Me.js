@@ -34,17 +34,34 @@ const Me = ({ data, user, second, setSecond, timeOut }) => {
         <View style={styles.container}>
             <Image
                 style={styles.avatar}
-                source={require('../../../assets/images/splash.png')}
+                source={require('../../../assets/images/profile.png')}
                 resizeMode='contain'
             />
             <View>
                 <View style={{ flexDirection: 'row' }}>
-                    <Text>{user.username}</Text>
-                    <Text>{user.player === 'playerX' ? 'X' : 'O'}</Text>
+                    <Text style={styles.username}>{user.username}phixuan</Text>
+                    <Text
+                        style={[
+                            styles.player,
+                            { color: user.player === 'playerX' ? 'black' : 'red' }
+                        ]}
+                    >
+                        {user.player === 'playerX' ? 'X' : 'O'}
+                    </Text>
                 </View>
                 <View>
-                    <Text>Elo: {user.elo}</Text>
-                    <Text>{second}</Text>
+                    <Text style={styles.elo}>Elo: {user.elo}1220</Text>
+                    <Text
+                        style={[
+                            styles.second,
+                            {
+                                backgroundColor: (user.player === 'playerX' && data.turn === 1) ? 'yellow' :
+                                    (user.player === 'playerO' && data.turn === 2) ? 'yellow' : '#20FF20'
+                                }
+                        ]}
+                    >
+                        00:{second}
+                    </Text>
                 </View>
             </View>
         </View>
@@ -54,14 +71,34 @@ const Me = ({ data, user, second, setSecond, timeOut }) => {
 export default Me
 
 const styles = StyleSheet.create({
+    second: {
+        fontWeight: 'bold',
+        borderRadius: 5,
+        color: 'white',
+        textAlign: 'center',
+    },
+    player: {
+        fontWeight: 'bold',
+        marginLeft: 10
+    },
+    elo: {
+        color: 'white'
+    },
+    username: {
+        color: 'white',
+        fontWeight: 'bold'
+    },
     avatar: {
-        width: 30,
-        height: 30,
-        backgroundColor: 'white'
+        width: 40,
+        height: 40,
+        borderRadius: 50,
+        marginRight: 15
     },
     container: {
-        backgroundColor: 'aqua',
+        height: '15%',
         padding: 10,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#18A3F5'
     }
 })

@@ -1,9 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React, { useContext } from 'react'
-import { UserContext } from '../../contexts/UserContext'
 
-const Infomation = () => {
-    const { userInfo } = useContext(UserContext)
+const Infomation = ({ userInfo }) => {
     const { username, email, win, draw, lose, elo, img } = userInfo
 
     return (
