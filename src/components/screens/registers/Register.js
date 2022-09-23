@@ -7,10 +7,10 @@ import MyButton from '../resuse/MyButton'
 import Newbie from '../resuse/Newbie'
 
 const Register = ({ navigation }) => {
-  const [username, setUsername] = useState('LongPham')
-  const [email, setEmail] = useState('longpham@gmail.com')
-  const [password, setPassword] = useState('123456')
-  const [confirmPassword, setConfirmPassword] = useState('123456')
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
   const handleRegister = async () => {

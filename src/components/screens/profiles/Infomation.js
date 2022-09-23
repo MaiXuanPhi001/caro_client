@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
         color: '#B8BDC2'
     },
     indexContent: {
-        alignItems: 'center'
+        alignItems: 'center',
+        marginRight: 7
     },
     email: {
         color: '#B8BDC2',

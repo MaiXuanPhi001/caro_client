@@ -9,7 +9,6 @@ const Stack = createNativeStackNavigator()
 const ProfileStack = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {/* <Stack.Screen name='CounDown' component={CounDown} /> */}
             <Stack.Screen name='Profile' component={Profile} />
             <Stack.Screen name='PvsP' component={PvsP} />
         </Stack.Navigator>

@@ -1,4 +1,4 @@
-import { Button, Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Button, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../contexts/UserContext'
 import BannerUser from '../resuse/BannerUser'
@@ -68,6 +68,9 @@ const Login = ({ navigation }) => {
         textTwo={' Register'}
         handle={() => navigation.navigate('Register')}
       />
+      <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+        <Text>Forgot Password</Text>
+      </TouchableOpacity>
     </ScrollView>
   )
 }

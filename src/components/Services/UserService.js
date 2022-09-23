@@ -24,3 +24,18 @@ export const getAll = async () => {
     const res = await axiosInstance.get('api/user/getAll')
     return res
 }
+
+export const sendEmail = async (email) => {
+    const res = await axiosInstance.post('api/otp/sendMail', { email })
+    return res
+}
+
+export const veryCodeOtp = async (email, codeOTP) => {
+    const res = await axiosInstance.post('api/otp/very', { email, codeOTP })
+    return res
+}
+
+export const changePassword = async (email, newPassword) => {
+    const res = await axiosInstance.post('api/user/changePassword', { email, newPassword })
+    return res
+}

@@ -1,6 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Container from './src/components/navigations/Container';
 import { UserContextProvider } from './src/components/contexts/UserContext';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']);
+LogBox.ignoreAllLogs();
 
 export default function App() {
   return (
