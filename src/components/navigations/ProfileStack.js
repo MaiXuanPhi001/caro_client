@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Profile from '../screens/profiles/Profile'
+import Profile from '../screens/Profiles/Profile'
 import PvsP from '../screens/PvsP/PvsP'
 
 const Stack = createNativeStackNavigator()
